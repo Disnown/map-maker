@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://bscjcadhcvdyo"]
+
+[ext_resource type="MeshLibrary" uid="uid://dr8rk4xg8q0kb" path="res://assets/prop_mesh_lib.tres" id="1_7lhv8"]
+
+[node name="New_Map" type="Node3D"]
+
+[node name="GridMap" type="GridMap" parent="."]
+transform = Transform3D(0.999384, -0.0351088, 0, 0.0351088, 0.999384, 0, 0, 0, 1, 0, 0, 0)
+mesh_library = ExtResource("1_7lhv8")
+cell_size = Vector3(1, 1, 1)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.996081, 0, -0.0884423, 0.0516837, 0.811482, 0.582087, 0.0717693, -0.584377, 0.808302, -1.96817, 1.75501, 2.0328)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.999741, 3.72432e-09, -0.0227746, 0.0133782, 0.809284, 0.587266, 0.0184311, -0.587418, 0.809074, -1.19031, 2.2999, 2.1578)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]

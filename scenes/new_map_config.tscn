@@ -1,0 +1,92 @@
+[gd_scene load_steps=2 format=3 uid="uid://bs8ddd7pdi24u"]
+
+[ext_resource type="Script" uid="uid://dx4c6s1gase3i" path="res://scripts/new_map_config.gd" id="1_6q0cn"]
+
+[node name="NewMapConfig" type="Node2D"]
+script = ExtResource("1_6q0cn")
+
+[node name="VFlowContainer" type="VFlowContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 629.0
+offset_top = 209.0
+offset_right = 731.0
+offset_bottom = 369.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TSLayer" type="LineEdit" parent="VFlowContainer"]
+layout_mode = 2
+text = "5"
+placeholder_text = "5"
+
+[node name="LSLayer" type="Label" parent="VFlowContainer/TSLayer"]
+layout_mode = 0
+offset_left = -139.0
+offset_top = -4.0
+offset_bottom = 52.0
+text = "Starting Layer :"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TWidth" type="LineEdit" parent="VFlowContainer"]
+layout_mode = 2
+text = "10"
+placeholder_text = "10"
+
+[node name="LWidth" type="Label" parent="VFlowContainer/TWidth"]
+layout_mode = 0
+offset_left = -139.0
+offset_top = -4.0
+offset_bottom = 52.0
+text = "Width :"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TLength" type="LineEdit" parent="VFlowContainer"]
+layout_mode = 2
+text = "10"
+placeholder_text = "10"
+
+[node name="LLength" type="Label" parent="VFlowContainer/TLength"]
+layout_mode = 0
+offset_left = -139.0
+offset_top = -4.0
+offset_bottom = 52.0
+text = "Length :"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="THeight" type="LineEdit" parent="VFlowContainer"]
+layout_mode = 2
+text = "10"
+placeholder_text = "10"
+
+[node name="LHeight" type="Label" parent="VFlowContainer/THeight"]
+layout_mode = 0
+offset_left = -139.0
+offset_top = -4.0
+offset_bottom = 52.0
+text = "Height :"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Cancel" type="Button" parent="."]
+offset_left = 511.0
+offset_top = 398.0
+offset_right = 602.0
+offset_bottom = 432.0
+text = "Cancel"
+
+[node name="Submit" type="Button" parent="."]
+offset_left = 635.0
+offset_top = 400.0
+offset_right = 726.0
+offset_bottom = 434.0
+text = "Submit"
+
+[connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="Submit" to="." method="_on_submit_pressed"]

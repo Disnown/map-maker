@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://c65x0n5u7c46q"]
+
+[ext_resource type="PackedScene" uid="uid://3kbk5kcjshxb" path="res://assets/Models/GLB format/block-grass-corner-low.glb" id="1_ex6cw"]
+[ext_resource type="PackedScene" uid="uid://b6lns73rb6g8n" path="res://assets/Models/GLB format/block-grass-corner-overhang.glb" id="2_jmkyg"]
+[ext_resource type="PackedScene" uid="uid://dvo56xbyyy0wf" path="res://assets/Models/GLB format/block-grass-curve-low.glb" id="3_t5yrn"]
+[ext_resource type="PackedScene" uid="uid://bshxlkn0bti6l" path="res://assets/Models/GLB format/block-grass-large-slope-narrow.glb" id="4_176iv"]
+
+[node name="GroundTile" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+
+[node name="block-grass-corner-low2" parent="." instance=ExtResource("1_ex6cw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.979904, 0, 0.352098)
+
+[node name="block-grass-corner-overhang2" parent="." instance=ExtResource("2_jmkyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01823, 0, -0.649447)
+
+[node name="block-grass-curve-low2" parent="." instance=ExtResource("3_t5yrn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.899369, 0, 1.10898)
+
+[node name="block-grass-large-slope-narrow2" parent="." instance=ExtResource("4_176iv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0957742, 0, 3.56026)
