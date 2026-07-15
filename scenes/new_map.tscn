@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bscjcadhcvdyo"]
+[gd_scene load_steps=8 format=3 uid="uid://bscjcadhcvdyo"]
 
 [ext_resource type="MeshLibrary" uid="uid://djrkxhf8yn1wi" path="res://assets/CC0assets.tres" id="1_7lhv8"]
 [ext_resource type="Script" uid="uid://cv7s7cqihi2fr" path="res://scripts/new_map.gd" id="1_nh1y2"]
 [ext_resource type="Script" uid="uid://blx51avgqigyk" path="res://scripts/camera_3d.gd" id="3_ixfb2"]
+[ext_resource type="Script" uid="uid://cphc0poiqy8ro" path="res://scripts/camera_rig.gd" id="3_vw1lw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nh1y2"]
 
@@ -56,8 +57,11 @@ data = {
 "cells": PackedInt32Array(0, 65535, 41, 65535, 65535, 41, 65535, 0, 41, 65534, 1, 41, 65534, 2, 41, 65535, 2, 41, 0, 2, 41, 0, 3, 41, 1, 2, 41, 1, 1, 41, 1, 0, 41, 0, 0, 41, 65535, 1, 41, 0, 1, 41, 1, 65535, 41, 65534, 65535, 41, 65534, 0, 41, 65534, 3, 41, 65535, 3, 41, 1, 3, 41)
 }
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 5, 8, 10)
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("3_vw1lw")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 0, 10, 10)
 current = true
 script = ExtResource("3_ixfb2")
 
