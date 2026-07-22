@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bscjcadhcvdyo"]
+[gd_scene load_steps=7 format=3 uid="uid://bscjcadhcvdyo"]
 
 [ext_resource type="MeshLibrary" uid="uid://djrkxhf8yn1wi" path="res://assets/CC0assets.tres" id="1_7lhv8"]
 [ext_resource type="Script" uid="uid://cv7s7cqihi2fr" path="res://scripts/new_map.gd" id="1_nh1y2"]
-[ext_resource type="Script" uid="uid://blx51avgqigyk" path="res://scripts/camera_3d.gd" id="3_ixfb2"]
 [ext_resource type="Script" uid="uid://cphc0poiqy8ro" path="res://scripts/camera_rig.gd" id="3_vw1lw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nh1y2"]
@@ -31,6 +30,7 @@ offset_left = 1.0
 offset_top = 2.0
 offset_right = 198.0
 offset_bottom = 422.0
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Toolbar"]
 layout_mode = 2
@@ -39,16 +39,9 @@ layout_mode = 2
 layout_mode = 2
 text = "Items"
 
-[node name="OptionButton" type="OptionButton" parent="CanvasLayer/Toolbar/VBoxContainer"]
+[node name="TileButton" type="Button" parent="CanvasLayer/Toolbar/VBoxContainer"]
 layout_mode = 2
-allow_reselect = true
-item_count = 3
-popup/item_0/text = "Ground"
-popup/item_0/id = 0
-popup/item_1/text = "Wall"
-popup/item_1/id = 1
-popup/item_2/text = "Tree"
-popup/item_2/id = 2
+text = "Tiles"
 
 [node name="GridMap" type="GridMap" parent="."]
 mesh_library = ExtResource("1_7lhv8")
@@ -63,6 +56,5 @@ script = ExtResource("3_vw1lw")
 [node name="Camera3D" type="Camera3D" parent="CameraRig"]
 transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 0, 10, 10)
 current = true
-script = ExtResource("3_ixfb2")
 
-[connection signal="item_selected" from="CanvasLayer/Toolbar/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="CanvasLayer/Toolbar/VBoxContainer/TileButton" to="." method="_on_tile_button_pressed"]

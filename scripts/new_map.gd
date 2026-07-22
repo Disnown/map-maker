@@ -1,10 +1,17 @@
 extends Node3D
 
+@onready var camera = $CameraRig/Camera3D
+@onready var grid_map = $GridMap
+
 var selected_tile = ""
 
+func _ready():
+	print("Map Editor Script Loaded")
 
-func _on_option_button_item_selected(index: int) -> void:
-	var option = $CanvasLayer/Toolbar/VBoxContainer/OptionButton
-	selected_tile = option.get_item_text(index)
 
-	print("Selected:", selected_tile)
+func _input(event):
+
+	if event is InputEventMouseButton:
+
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			print("Left mouse clicked")
