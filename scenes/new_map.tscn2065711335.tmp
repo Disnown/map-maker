@@ -49,7 +49,7 @@ layout_mode = 2
 text = "Tiles"
 
 [node name="GridMap" type="GridMap" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.999151, -0.0411956, 0, 0.0411956, 0.999151, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.8271, 0.562055, 0, -0.562055, 0.8271, 0, 0, 0)
 mesh_library = ExtResource("1_7lhv8")
 cell_size = Vector3(1, 1, 1)
 data = {
@@ -64,7 +64,7 @@ transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 
 current = true
 
 [node name="GhostTile" type="MeshInstance3D" parent="."]
-transparency = 0.51
+transparency = 0.5
 mesh = SubResource("PlaceholderMesh_ixfb2")
 
 [connection signal="pressed" from="CanvasLayer/Toolbar/ScrollContainer/TileList/TileButton" to="." method="_on_tile_button_pressed"]
