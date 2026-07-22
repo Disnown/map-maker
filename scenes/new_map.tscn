@@ -40,13 +40,24 @@ layout_mode = 2
 [node name="TileList" type="VBoxContainer" parent="CanvasLayer/Toolbar/ScrollContainer"]
 layout_mode = 2
 
+[node name="CreateButton" type="Button" parent="CanvasLayer/Toolbar/ScrollContainer/TileList"]
+custom_minimum_size = Vector2(150, 0)
+layout_direction = 2
+layout_mode = 2
+text = "Create"
+alignment = 0
+
+[node name="DeleteButton" type="Button" parent="CanvasLayer/Toolbar/ScrollContainer/TileList"]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+text = "Delete
+"
+alignment = 0
+clip_text = true
+
 [node name="Tile" type="Label" parent="CanvasLayer/Toolbar/ScrollContainer/TileList"]
 layout_mode = 2
-text = "Items"
-
-[node name="TileButton" type="Button" parent="CanvasLayer/Toolbar/ScrollContainer/TileList"]
-layout_mode = 2
-text = "Tiles"
+text = "Assets"
 
 [node name="GridMap" type="GridMap" parent="."]
 mesh_library = ExtResource("1_7lhv8")
@@ -66,4 +77,5 @@ current = true
 transparency = 0.51
 mesh = SubResource("PlaceholderMesh_ixfb2")
 
-[connection signal="pressed" from="CanvasLayer/Toolbar/ScrollContainer/TileList/TileButton" to="." method="_on_tile_button_pressed"]
+[node name="DeleteGhostTile" type="MeshInstance3D" parent="."]
+visible = false
