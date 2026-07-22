@@ -11,6 +11,8 @@ extends Node3D
 @export var min_zoom := 3.0
 @export var max_zoom := 25.0
 
+@onready var tile_scroll = $"../CanvasLayer/Toolbar/ScrollContainer"
+
 var rotating := false
 
 
@@ -56,6 +58,10 @@ func _input(event):
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 			else:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+		# Don't zoom if the mouse is over the tile list
+		elif tile_scroll.get_global_rect().has_point(get_viewport().get_mouse_position()):
+			return
 
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
 
