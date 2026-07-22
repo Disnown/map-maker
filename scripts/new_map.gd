@@ -94,9 +94,63 @@ func update_ghost_position():
 		return
 
 
+	var cell = get_placement_cell()
+
+	if cell.y < 0:
+		cell.y = 0
+	ghost_tile.position = grid_map.map_to_local(cell)
+
+func _unhandled_input(event):
+
+	if event is InputEventMouseButton:
+
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+
+			place_tile()
+
+func place_tile():
+
+	if selected_tile_id == -1:
+		return
+
+
+	var cell = grid_map.local_to_map(
+		grid_map.to_local(ghost_tile.position)
+	)
+
+	grid_map.set_cell_item(
+		cell,
+		selected_tile_id
+	)
+
+	print("Placed:", cell)
+
+func get_placement_cell() -> Vector3i:
+
+	var mouse = get_viewport().get_mouse_position()
+
+	var ray_origin = camera.project_ray_origin(mouse)
+	var ray_direction = camera.project_ray_normal(mouse)
+
+	var plane = Plane(Vector3.UP, 0)
+
+	var hit = plane.intersects_ray(
+		ray_origin,
+		ray_direction
+	)
+
+	if hit == null:
+		return Vector3i(-999,-999,-999)
+
+
 	var cell = grid_map.local_to_map(
 		grid_map.to_local(hit)
 	)
 
 
-	ghost_tile.position = grid_map.map_to_local(cell)
+	# Move upwards until we find an empty cell
+	while grid_map.get_cell_item(cell) != -1:
+		cell.y += 1
+
+
+	return cell
