@@ -34,6 +34,8 @@ func _ready():
 	create_tile_buttons()
 
 	ghost_tile.visible = false
+	delete_ghost.visible = false
+	
 
 func _on_place_button_pressed():
 
@@ -254,6 +256,30 @@ func get_mouse_cell() -> Vector3i:
 		grid_map.to_local(hit)
 	)
 	
-	
+func update_delete_preview():
+
+	var cell = get_mouse_cell()
+
+
+	if cell == Vector3i(-999,-999,-999):
+		delete_ghost.visible = false
+		return
+
+
+	var tile_id = grid_map.get_cell_item(cell)
+
+
+	if tile_id == -1:
+		delete_ghost.visible = false
+		return
+
+
+	var mesh = grid_map.mesh_library.get_item_mesh(tile_id)
+
+	delete_ghost.mesh = mesh
+
+	delete_ghost.position = grid_map.map_to_local(cell)
+
+	delete_ghost.visible = true
 	
 	

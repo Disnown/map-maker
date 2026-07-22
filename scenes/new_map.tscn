@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bscjcadhcvdyo"]
+[gd_scene load_steps=10 format=3 uid="uid://bscjcadhcvdyo"]
 
 [ext_resource type="MeshLibrary" uid="uid://djrkxhf8yn1wi" path="res://assets/CC0assets.tres" id="1_7lhv8"]
 [ext_resource type="Script" uid="uid://cv7s7cqihi2fr" path="res://scripts/new_map.gd" id="1_nh1y2"]
@@ -14,6 +14,12 @@ background_mode = 2
 sky = SubResource("Sky_ixfb2")
 
 [sub_resource type="PlaceholderMesh" id="PlaceholderMesh_ixfb2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ixfb2"]
+transparency = 1
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="PlaceholderMesh" id="PlaceholderMesh_vw1lw"]
 
 [node name="New_Map" type="Node3D"]
 script = ExtResource("1_nh1y2")
@@ -74,8 +80,10 @@ transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 
 current = true
 
 [node name="GhostTile" type="MeshInstance3D" parent="."]
-transparency = 0.51
+transparency = 0.5
 mesh = SubResource("PlaceholderMesh_ixfb2")
 
 [node name="DeleteGhostTile" type="MeshInstance3D" parent="."]
-visible = false
+material_override = SubResource("StandardMaterial3D_ixfb2")
+transparency = 0.5
+mesh = SubResource("PlaceholderMesh_vw1lw")
