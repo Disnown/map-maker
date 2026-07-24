@@ -16,8 +16,7 @@ var selected_tile_id := -1
 
 @onready var create_button = $CanvasLayer/MenuOptions/ButtonList/CreateButton
 @onready var delete_button = $CanvasLayer/MenuOptions/ButtonList/DeleteButton
-@onready var save_button = $CanvasLayer/MenuOptions/ButtonList/SaveButton
-@onready var load_button = $CanvasLayer/MenuOptions/ButtonList/LoadButton
+@onready var load_button = $CanvasLayer/MenuOptions/ButtonList/ImportButton
 @onready var export_button = $CanvasLayer/MenuOptions/ButtonList/ExportButton
 
 
@@ -317,11 +316,7 @@ func get_grid_rotation() -> int:
 
 	return grid_map.get_orthogonal_index_from_basis(basis)
 
-func _on_save_button_pressed():
-	var map_data = export_map()
-
-func _on_load_button_pressed():
-
+func _on_import_button_pressed() -> void:
 	$ImportDialog.popup_centered_ratio()
 
 func _on_export_button_pressed():
@@ -457,3 +452,8 @@ func build_map(data):
 			cell,
 			tile_id
 		)
+
+
+
+
+	

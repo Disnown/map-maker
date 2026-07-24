@@ -74,17 +74,13 @@ text = "Remove
 alignment = 0
 clip_text = true
 
-[node name="SaveButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
+[node name="ImportButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
 layout_mode = 2
-text = "Save"
-
-[node name="LoadButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
-layout_mode = 2
-text = "Load"
+text = "Import Map"
 
 [node name="ExportButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
 layout_mode = 2
-text = "Export"
+text = "Export Map"
 
 [node name="GridMap" type="GridMap" parent="."]
 mesh_library = ExtResource("1_7lhv8")
@@ -121,8 +117,7 @@ file_mode = 0
 access = 2
 filters = PackedStringArray("*.json")
 
-[connection signal="pressed" from="CanvasLayer/MenuOptions/ButtonList/SaveButton" to="." method="_on_save_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/MenuOptions/ButtonList/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MenuOptions/ButtonList/ImportButton" to="." method="_on_import_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MenuOptions/ButtonList/ExportButton" to="." method="_on_export_button_pressed"]
 [connection signal="file_selected" from="ExportDialog" to="." method="_on_export_dialog_file_selected"]
 [connection signal="file_selected" from="ImportDialog" to="." method="_on_load_dialog_file_selected"]
