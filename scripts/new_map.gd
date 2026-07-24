@@ -17,6 +17,8 @@ var selected_tile_id := -1
 @onready var create_button = $CanvasLayer/Toolbar/ScrollContainer/TileList/CreateButton
 @onready var delete_button = $CanvasLayer/Toolbar/ScrollContainer/TileList/DeleteButton
 
+var current_rotation := 0
+
 enum Tool {
 	PLACE,
 	DELETE
@@ -91,12 +93,13 @@ func update_ghost_mesh():
 		ghost_tile.visible = false
 		return
 
-
 	var mesh = mesh_library.get_item_mesh(selected_tile_id)
 
 	ghost_tile.mesh = mesh
 
 	ghost_tile.visible = true
+
+	update_ghost_rotation()
 
 func _process(delta):
 
@@ -155,6 +158,16 @@ func _unhandled_input(event):
 				Tool.DELETE:
 					remove_tile()
 
+	if event is InputEventKey and event.pressed:
+
+		if event.keycode == KEY_R:
+
+			current_rotation = (current_rotation + 1) % 4
+
+			print("Rotation:", current_rotation)
+
+			update_ghost_rotation()
+
 
 func place_tile():
 
@@ -168,7 +181,8 @@ func place_tile():
 
 	grid_map.set_cell_item(
 		cell,
-		selected_tile_id
+		selected_tile_id,
+		get_grid_rotation()
 	)
 
 	print("Placed:", cell)
@@ -281,5 +295,18 @@ func update_delete_preview():
 	delete_ghost.position = grid_map.map_to_local(cell)
 
 	delete_ghost.visible = true
-	
-	
+
+func update_ghost_rotation():
+
+	ghost_tile.rotation_degrees.y = current_rotation * 90
+
+func get_grid_rotation() -> int:
+
+	var basis = Basis()
+
+	basis = basis.rotated(
+		Vector3.UP,
+		deg_to_rad(current_rotation * 90)
+	)
+
+	return grid_map.get_orthogonal_index_from_basis(basis)
