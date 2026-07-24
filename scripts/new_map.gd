@@ -1,17 +1,15 @@
 extends Node3D
 
+
+# =========================
+# REFERENCES
+# =========================
+
 @onready var camera = $CameraRig/Camera3D
 @onready var grid_map = $GridMap
 @onready var tile_list = $CanvasLayer/Toolbar/ScrollContainer/TileList
-var mesh_library : MeshLibrary
-
-var selected_tile = ""
-
-var current_layer := 0
 
 @onready var ghost_tile: MeshInstance3D = $GhostTile
-var selected_tile_id := -1
-
 @onready var delete_ghost: MeshInstance3D = $DeleteGhostTile
 
 @onready var create_button = $CanvasLayer/MenuOptions/ButtonList/CreateButton
@@ -19,8 +17,20 @@ var selected_tile_id := -1
 @onready var load_button = $CanvasLayer/MenuOptions/ButtonList/ImportButton
 @onready var export_button = $CanvasLayer/MenuOptions/ButtonList/ExportButton
 
+# =========================
+# VARIABLES
+# =========================
+
+var mesh_library : MeshLibrary
+
+var selected_tile_id := -1
+var selected_tile = ""
 
 var current_rotation := 0
+
+# =========================
+# ENUMS
+# =========================
 
 enum Tool {
 	PLACE,
@@ -28,6 +38,10 @@ enum Tool {
 }
 
 var current_tool = Tool.PLACE
+
+# =========================
+# STARTUP
+# =========================
 
 func _ready():
 
@@ -44,6 +58,10 @@ func _ready():
 	$ExportDialog.hide()
 	$ImportDialog.hide()
 
+# =========================
+# TOOL SWITCHING
+# =========================
+
 func _on_place_button_pressed():
 
 	current_tool = Tool.PLACE
@@ -52,8 +70,6 @@ func _on_place_button_pressed():
 	if selected_tile_id != -1:
 		ghost_tile.visible = true
 
-	print("Tool: Place")
-
 func _on_delete_button_pressed():
 
 	current_tool = Tool.DELETE
@@ -61,7 +77,9 @@ func _on_delete_button_pressed():
 	ghost_tile.visible = false
 	delete_ghost.visible = true
 
-	print("Tool: Delete")
+# =========================
+# TILE PALETTE
+# =========================
 
 func create_tile_buttons():
 
@@ -92,6 +110,10 @@ func _on_tile_selected(id:int):
 
 	update_ghost_mesh()
 
+# =========================
+# GHOST TILE
+# =========================
+
 func update_ghost_mesh():
 
 	if selected_tile_id == -1:
@@ -105,18 +127,6 @@ func update_ghost_mesh():
 	ghost_tile.visible = true
 
 	update_ghost_rotation()
-
-func _process(delta):
-
-	if current_tool == Tool.PLACE:
-
-		if selected_tile_id != -1:
-			update_ghost_position()
-
-
-	elif current_tool == Tool.DELETE:
-
-		update_delete_preview()
 
 func update_ghost_position():
 
@@ -149,6 +159,14 @@ func update_ghost_position():
 		cell.y = 0
 	ghost_tile.position = grid_map.map_to_local(cell)
 
+func update_ghost_rotation():
+
+	ghost_tile.rotation_degrees.y = current_rotation * 90
+
+# =========================
+# INPUT
+# =========================
+
 func _unhandled_input(event):
 
 	if event is InputEventMouseButton:
@@ -173,6 +191,25 @@ func _unhandled_input(event):
 
 			update_ghost_rotation()
 
+# =========================
+# PROCESS
+# =========================
+
+func _process(delta):
+
+	if current_tool == Tool.PLACE:
+
+		if selected_tile_id != -1:
+			update_ghost_position()
+
+
+	elif current_tool == Tool.DELETE:
+
+		update_delete_preview()
+
+# =========================
+# PLACING
+# =========================
 
 func place_tile():
 
@@ -191,6 +228,65 @@ func place_tile():
 	)
 
 	print("Placed:", cell)
+
+# =========================
+# DELETING
+# =========================
+
+func remove_tile():
+
+	var cell = get_mouse_cell()
+
+
+	if cell == Vector3i(-999,-999,-999):
+		return
+
+
+	var tile_id = grid_map.get_cell_item(cell)
+
+
+	if tile_id == -1:
+		print("No tile here")
+		return
+
+
+	grid_map.set_cell_item(
+		cell,
+		-1
+	)
+
+
+	print("Removed tile at:", cell)
+
+func update_delete_preview():
+
+	var cell = get_mouse_cell()
+
+
+	if cell == Vector3i(-999,-999,-999):
+		delete_ghost.visible = false
+		return
+
+
+	var tile_id = grid_map.get_cell_item(cell)
+
+
+	if tile_id == -1:
+		delete_ghost.visible = false
+		return
+
+
+	var mesh = grid_map.mesh_library.get_item_mesh(tile_id)
+
+	delete_ghost.mesh = mesh
+
+	delete_ghost.position = grid_map.map_to_local(cell)
+
+	delete_ghost.visible = true
+
+# =========================
+# GRID / RAYCAST
+# =========================
 
 func get_placement_cell() -> Vector3i:
 
@@ -222,31 +318,6 @@ func get_placement_cell() -> Vector3i:
 
 	return cell
 
-func remove_tile():
-
-	var cell = get_mouse_cell()
-
-
-	if cell == Vector3i(-999,-999,-999):
-		return
-
-
-	var tile_id = grid_map.get_cell_item(cell)
-
-
-	if tile_id == -1:
-		print("No tile here")
-		return
-
-
-	grid_map.set_cell_item(
-		cell,
-		-1
-	)
-
-
-	print("Removed tile at:", cell)
-
 func get_mouse_cell() -> Vector3i:
 
 	var mouse = get_viewport().get_mouse_position()
@@ -275,35 +346,10 @@ func get_mouse_cell() -> Vector3i:
 		grid_map.to_local(hit)
 	)
 	
-func update_delete_preview():
 
-	var cell = get_mouse_cell()
-
-
-	if cell == Vector3i(-999,-999,-999):
-		delete_ghost.visible = false
-		return
-
-
-	var tile_id = grid_map.get_cell_item(cell)
-
-
-	if tile_id == -1:
-		delete_ghost.visible = false
-		return
-
-
-	var mesh = grid_map.mesh_library.get_item_mesh(tile_id)
-
-	delete_ghost.mesh = mesh
-
-	delete_ghost.position = grid_map.map_to_local(cell)
-
-	delete_ghost.visible = true
-
-func update_ghost_rotation():
-
-	ghost_tile.rotation_degrees.y = current_rotation * 90
+# =========================
+# ROTATION
+# =========================
 
 func get_grid_rotation() -> int:
 
@@ -316,8 +362,9 @@ func get_grid_rotation() -> int:
 
 	return grid_map.get_orthogonal_index_from_basis(basis)
 
-func _on_import_button_pressed() -> void:
-	$ImportDialog.popup_centered_ratio()
+# =========================
+# SAVE / EXPORT
+# =========================
 
 func _on_export_button_pressed():
 
@@ -385,6 +432,12 @@ func _on_export_dialog_file_selected(path):
 
 	print("Saved:", path)
 
+# =========================
+# LOAD / IMPORT
+# =========================
+
+func _on_import_button_pressed() -> void:
+	$ImportDialog.popup_centered_ratio()
 
 func _on_load_dialog_file_selected(path: String) -> void:
 	load_map(path)
@@ -458,8 +511,3 @@ func build_map(data):
 			tile_id,
 			rotation
 		)
-
-
-
-
-	
