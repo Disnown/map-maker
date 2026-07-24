@@ -46,24 +46,45 @@ layout_mode = 2
 [node name="TileList" type="VBoxContainer" parent="CanvasLayer/Toolbar/ScrollContainer"]
 layout_mode = 2
 
-[node name="CreateButton" type="Button" parent="CanvasLayer/Toolbar/ScrollContainer/TileList"]
+[node name="Tile" type="Label" parent="CanvasLayer/Toolbar/ScrollContainer/TileList"]
+layout_mode = 2
+text = "Assets"
+
+[node name="MenuOptions" type="PanelContainer" parent="CanvasLayer"]
+offset_left = 953.0
+offset_top = 2.0
+offset_right = 1151.0
+offset_bottom = 427.0
+
+[node name="ButtonList" type="VBoxContainer" parent="CanvasLayer/MenuOptions"]
+layout_mode = 2
+
+[node name="CreateButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
 custom_minimum_size = Vector2(150, 0)
 layout_direction = 2
 layout_mode = 2
 text = "Create"
 alignment = 0
 
-[node name="DeleteButton" type="Button" parent="CanvasLayer/Toolbar/ScrollContainer/TileList"]
+[node name="DeleteButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
-text = "Delete
+text = "Remove
 "
 alignment = 0
 clip_text = true
 
-[node name="Tile" type="Label" parent="CanvasLayer/Toolbar/ScrollContainer/TileList"]
+[node name="SaveButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
 layout_mode = 2
-text = "Assets"
+text = "Save"
+
+[node name="LoadButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
+layout_mode = 2
+text = "Load"
+
+[node name="ExportButton" type="Button" parent="CanvasLayer/MenuOptions/ButtonList"]
+layout_mode = 2
+text = "Export"
 
 [node name="GridMap" type="GridMap" parent="."]
 mesh_library = ExtResource("1_7lhv8")
@@ -87,3 +108,21 @@ mesh = SubResource("PlaceholderMesh_ixfb2")
 material_override = SubResource("StandardMaterial3D_ixfb2")
 transparency = 0.5
 mesh = SubResource("PlaceholderMesh_vw1lw")
+
+[node name="ExportDialog" type="FileDialog" parent="."]
+visible = true
+access = 2
+filters = PackedStringArray("*.json")
+
+[node name="ImportDialog" type="FileDialog" parent="."]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.json")
+
+[connection signal="pressed" from="CanvasLayer/MenuOptions/ButtonList/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MenuOptions/ButtonList/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MenuOptions/ButtonList/ExportButton" to="." method="_on_export_button_pressed"]
+[connection signal="file_selected" from="ExportDialog" to="." method="_on_export_dialog_file_selected"]
+[connection signal="file_selected" from="ImportDialog" to="." method="_on_load_dialog_file_selected"]

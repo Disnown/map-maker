@@ -14,8 +14,12 @@ var selected_tile_id := -1
 
 @onready var delete_ghost: MeshInstance3D = $DeleteGhostTile
 
-@onready var create_button = $CanvasLayer/Toolbar/ScrollContainer/TileList/CreateButton
-@onready var delete_button = $CanvasLayer/Toolbar/ScrollContainer/TileList/DeleteButton
+@onready var create_button = $CanvasLayer/MenuOptions/ButtonList/CreateButton
+@onready var delete_button = $CanvasLayer/MenuOptions/ButtonList/DeleteButton
+@onready var save_button = $CanvasLayer/MenuOptions/ButtonList/SaveButton
+@onready var load_button = $CanvasLayer/MenuOptions/ButtonList/LoadButton
+@onready var export_button = $CanvasLayer/MenuOptions/ButtonList/ExportButton
+
 
 var current_rotation := 0
 
@@ -37,7 +41,9 @@ func _ready():
 
 	ghost_tile.visible = false
 	delete_ghost.visible = false
-	
+
+	$ExportDialog.hide()
+	$ImportDialog.hide()
 
 func _on_place_button_pressed():
 
@@ -310,3 +316,144 @@ func get_grid_rotation() -> int:
 	)
 
 	return grid_map.get_orthogonal_index_from_basis(basis)
+
+func _on_save_button_pressed():
+	var map_data = export_map()
+
+func _on_load_button_pressed():
+
+	$ImportDialog.popup_centered_ratio()
+
+func _on_export_button_pressed():
+
+	$ExportDialog.popup_centered_ratio()
+
+func export_map() -> Dictionary:
+
+	var data = {
+		"mapTag": "new_map",
+		"tiles": []
+	}
+
+
+	var used_cells = grid_map.get_used_cells()
+
+
+	for cell in used_cells:
+
+		var tile_id = grid_map.get_cell_item(cell)
+
+		if tile_id == -1:
+			continue
+
+
+		var tile_name = grid_map.mesh_library.get_item_name(tile_id)
+
+
+		var tile_data = {
+			"name": tile_name,
+			"cell": {
+				"x": cell.x,
+				"y": cell.y,
+				"z": cell.z
+			}
+		}
+
+
+		data["tiles"].append(tile_data)
+
+
+	return data
+
+
+func _on_export_dialog_file_selected(path):
+
+	var map_data = export_map()
+
+	var json_string = JSON.stringify(
+		map_data,
+		"\t"
+	)
+
+
+	var file = FileAccess.open(
+		path,
+		FileAccess.WRITE
+	)
+
+
+	file.store_string(json_string)
+
+	file.close()
+
+
+	print("Saved:", path)
+
+
+func _on_load_dialog_file_selected(path: String) -> void:
+	load_map(path)
+
+func load_map(path:String):
+
+	var file = FileAccess.open(
+		path,
+		FileAccess.READ
+	)
+
+
+	var json_text = file.get_as_text()
+
+	file.close()
+
+
+	var map_data = JSON.parse_string(json_text)
+
+
+	if map_data == null:
+		print("Invalid JSON")
+		return
+
+
+	clear_map()
+
+	build_map(map_data)
+
+	print("Map loaded:", path)
+
+func clear_map():
+
+	for cell in grid_map.get_used_cells():
+
+		grid_map.set_cell_item(
+			cell,
+			-1
+		)
+
+func build_map(data):
+
+	for tile in data["tiles"]:
+
+		var cell_data = tile["cell"]
+
+		var cell = Vector3i(
+			cell_data["x"],
+			cell_data["y"],
+			cell_data["z"]
+		)
+
+
+		var tile_name = tile["name"]
+
+
+		var tile_id = mesh_library.find_item_by_name(tile_name)
+
+
+		if tile_id == -1:
+			print("Missing tile:", tile_name)
+			continue
+
+
+		grid_map.set_cell_item(
+			cell,
+			tile_id
+		)
