@@ -28,6 +28,9 @@ var selected_tile = ""
 
 var current_rotation := 0
 
+var undo_stack:Array = []
+var redo_stack:Array = []
+
 # =========================
 # ENUMS
 # =========================
@@ -136,22 +139,18 @@ func update_ghost_position():
 
 	var ray_direction = camera.project_ray_normal(mouse)
 
-
 	var plane = Plane(
 		Vector3.UP,
 		0
 	)
-
 
 	var hit = plane.intersects_ray(
 		ray_origin,
 		ray_direction
 	)
 
-
 	if hit == null:
 		return
-
 
 	var cell = get_placement_cell()
 
@@ -191,6 +190,16 @@ func _unhandled_input(event):
 
 			update_ghost_rotation()
 
+	if event is InputEventKey and event.pressed:
+
+		if event.ctrl_pressed:
+
+			if event.keycode == KEY_Z:
+				undo()
+
+			if event.keycode == KEY_Y:
+				redo()
+
 # =========================
 # PROCESS
 # =========================
@@ -201,7 +210,6 @@ func _process(delta):
 
 		if selected_tile_id != -1:
 			update_ghost_position()
-
 
 	elif current_tool == Tool.DELETE:
 
@@ -216,10 +224,18 @@ func place_tile():
 	if selected_tile_id == -1:
 		return
 
-
 	var cell = grid_map.local_to_map(
 		grid_map.to_local(ghost_tile.position)
 	)
+
+	var old_tile = grid_map.get_cell_item(cell)
+
+	var old_rotation = 0
+
+	if old_tile != -1:
+		old_rotation = grid_map.get_cell_item_orientation(cell)
+
+	var new_rotation = get_grid_rotation()
 
 	grid_map.set_cell_item(
 		cell,
@@ -227,7 +243,13 @@ func place_tile():
 		get_grid_rotation()
 	)
 
-	print("Placed:", cell)
+	save_action(
+		cell,
+		old_tile,
+		old_rotation,
+		selected_tile_id,
+		new_rotation
+	)
 
 # =========================
 # DELETING
@@ -237,44 +259,44 @@ func remove_tile():
 
 	var cell = get_mouse_cell()
 
-
 	if cell == Vector3i(-999,-999,-999):
 		return
 
-
 	var tile_id = grid_map.get_cell_item(cell)
-
 
 	if tile_id == -1:
 		print("No tile here")
 		return
 
+	var old_tile = grid_map.get_cell_item(cell)
+	var old_rotation = grid_map.get_cell_item_orientation(cell)
 
 	grid_map.set_cell_item(
 		cell,
 		-1
 	)
 
-
-	print("Removed tile at:", cell)
+	save_action(
+	cell,
+	tile_id,
+	old_rotation,
+	-1,
+	0
+	)
 
 func update_delete_preview():
 
 	var cell = get_mouse_cell()
 
-
 	if cell == Vector3i(-999,-999,-999):
 		delete_ghost.visible = false
 		return
 
-
 	var tile_id = grid_map.get_cell_item(cell)
-
 
 	if tile_id == -1:
 		delete_ghost.visible = false
 		return
-
 
 	var mesh = grid_map.mesh_library.get_item_mesh(tile_id)
 
@@ -305,16 +327,13 @@ func get_placement_cell() -> Vector3i:
 	if hit == null:
 		return Vector3i(-999,-999,-999)
 
-
 	var cell = grid_map.local_to_map(
 		grid_map.to_local(hit)
 	)
 
-
 	# Move upwards until we find an empty cell
 	while grid_map.get_cell_item(cell) != -1:
 		cell.y += 1
-
 
 	return cell
 
@@ -325,22 +344,18 @@ func get_mouse_cell() -> Vector3i:
 	var ray_origin = camera.project_ray_origin(mouse)
 	var ray_direction = camera.project_ray_normal(mouse)
 
-
 	var plane = Plane(
 		Vector3.UP,
 		0
 	)
-
 
 	var hit = plane.intersects_ray(
 		ray_origin,
 		ray_direction
 	)
 
-
 	if hit == null:
 		return Vector3i(-999,-999,-999)
-
 
 	return grid_map.local_to_map(
 		grid_map.to_local(hit)
@@ -380,7 +395,6 @@ func export_map() -> Dictionary:
 
 	var used_cells = grid_map.get_used_cells()
 
-
 	for cell in used_cells:
 
 		var tile_id = grid_map.get_cell_item(cell)
@@ -388,9 +402,7 @@ func export_map() -> Dictionary:
 		if tile_id == -1:
 			continue
 
-
 		var tile_name = grid_map.mesh_library.get_item_name(tile_id)
-
 
 		var tile_data = {
 			"name": tile_name,
@@ -402,9 +414,7 @@ func export_map() -> Dictionary:
 			"rotation": grid_map.get_cell_item_orientation(cell)
 		}
 
-
 		data["tiles"].append(tile_data)
-
 
 	return data
 
@@ -418,17 +428,14 @@ func _on_export_dialog_file_selected(path):
 		"\t"
 	)
 
-
 	var file = FileAccess.open(
 		path,
 		FileAccess.WRITE
 	)
 
-
 	file.store_string(json_string)
 
 	file.close()
-
 
 	print("Saved:", path)
 
@@ -449,11 +456,9 @@ func load_map(path:String):
 		FileAccess.READ
 	)
 
-
 	var json_text = file.get_as_text()
 
 	file.close()
-
 
 	var map_data = JSON.parse_string(json_text)
 
@@ -461,7 +466,6 @@ func load_map(path:String):
 	if map_data == null:
 		print("Invalid JSON")
 		return
-
 
 	clear_map()
 
@@ -490,12 +494,9 @@ func build_map(data):
 			cell_data["z"]
 		)
 
-
 		var tile_name = tile["name"]
 
-
 		var tile_id = mesh_library.find_item_by_name(tile_name)
-
 
 		if tile_id == -1:
 			print("Missing tile:", tile_name)
@@ -511,3 +512,59 @@ func build_map(data):
 			tile_id,
 			rotation
 		)
+
+# =========================
+# UNDO / REDO
+# =========================
+
+func save_action(
+	cell:Vector3i,
+	old_tile:int,
+	old_rotation:int,
+	new_tile:int,
+	new_rotation:int
+):
+
+	var action = {
+		"cell": cell,
+
+		"old_tile": old_tile,
+		"old_rotation": old_rotation,
+
+		"new_tile": new_tile,
+		"new_rotation": new_rotation
+	}
+
+	undo_stack.append(action)
+
+	redo_stack.clear()
+
+func undo():
+
+	if undo_stack.is_empty():
+		return
+
+	var action = undo_stack.pop_back()
+
+	grid_map.set_cell_item(
+		action.cell,
+		action.old_tile,
+		action.old_rotation
+	)
+
+	redo_stack.append(action)
+
+func redo():
+
+	if redo_stack.is_empty():
+		return
+
+	var action = redo_stack.pop_back()
+
+	grid_map.set_cell_item(
+		action.cell,
+		action.new_tile,
+		action.new_rotation
+	)
+
+	undo_stack.append(action)
