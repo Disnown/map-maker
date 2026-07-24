@@ -190,8 +190,6 @@ func _unhandled_input(event):
 
 			update_ghost_rotation()
 
-	if event is InputEventKey and event.pressed:
-
 		if event.ctrl_pressed:
 
 			if event.keycode == KEY_Z:
@@ -199,6 +197,12 @@ func _unhandled_input(event):
 
 			if event.keycode == KEY_Y:
 				redo()
+
+			if event.keycode == KEY_S:
+				$ExportDialog.popup_centered_ratio()
+
+			if event.keycode == KEY_L:
+				$ImportDialog.popup_centered_ratio()
 
 # =========================
 # PROCESS
