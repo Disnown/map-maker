@@ -199,10 +199,10 @@ func _unhandled_input(event):
 				redo()
 
 			if event.keycode == KEY_S:
-				$ExportDialog.popup_centered_ratio()
+				_on_export_button_pressed()
 
 			if event.keycode == KEY_L:
-				$ImportDialog.popup_centered_ratio()
+				_on_import_button_pressed()
 
 # =========================
 # PROCESS
@@ -387,9 +387,10 @@ func get_grid_rotation() -> int:
 
 func _on_export_button_pressed():
 
+	$ExportDialog.current_file = "new_map.json"
 	$ExportDialog.popup_centered_ratio()
 
-func export_map() -> Dictionary:
+func export_map(map_tag:String) -> Dictionary:
 
 	var data = {
 		"mapTag": "new_map",
@@ -425,7 +426,9 @@ func export_map() -> Dictionary:
 
 func _on_export_dialog_file_selected(path):
 
-	var map_data = export_map()
+	var map_tag = path.get_file().get_basename()
+
+	var map_data = export_map(map_tag)
 
 	var json_string = JSON.stringify(
 		map_data,

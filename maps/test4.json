@@ -1,0 +1,212 @@
+{
+	"mapTag": "new_map",
+	"tiles": [
+		{
+			"cell": {
+				"x": 0,
+				"y": 0,
+				"z": -1
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -1,
+				"y": 0,
+				"z": -1
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -1,
+				"y": 0,
+				"z": 0
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -2,
+				"y": 0,
+				"z": 1
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -2,
+				"y": 0,
+				"z": 2
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 0,
+				"y": 0,
+				"z": 2
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 0,
+				"y": 0,
+				"z": 3
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 1,
+				"y": 0,
+				"z": 2
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 1,
+				"y": 0,
+				"z": 1
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 1,
+				"y": 0,
+				"z": 0
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 0,
+				"y": 0,
+				"z": 1
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 1,
+				"y": 0,
+				"z": -1
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -2,
+				"y": 0,
+				"z": -1
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -2,
+				"y": 0,
+				"z": 0
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -2,
+				"y": 0,
+				"z": 3
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": 1,
+				"y": 0,
+				"z": 3
+			},
+			"name": "block-grass",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -2,
+				"y": 1,
+				"z": 3
+			},
+			"name": "arrow",
+			"rotation": 0
+		},
+		{
+			"cell": {
+				"x": -1,
+				"y": 1,
+				"z": 3
+			},
+			"name": "arrow",
+			"rotation": 16
+		},
+		{
+			"cell": {
+				"x": 0,
+				"y": 1,
+				"z": 3
+			},
+			"name": "arrow",
+			"rotation": 10
+		},
+		{
+			"cell": {
+				"x": 1,
+				"y": 1,
+				"z": 3
+			},
+			"name": "arrow",
+			"rotation": 22
+		},
+		{
+			"cell": {
+				"x": -2,
+				"y": 2,
+				"z": 3
+			},
+			"name": "arrow",
+			"rotation": 22
+		},
+		{
+			"cell": {
+				"x": -2,
+				"y": 1,
+				"z": 4
+			},
+			"name": "block-grass-corner",
+			"rotation": 22
+		}
+	]
+}
