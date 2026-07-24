@@ -351,7 +351,8 @@ func export_map() -> Dictionary:
 				"x": cell.x,
 				"y": cell.y,
 				"z": cell.z
-			}
+			},
+			"rotation": grid_map.get_cell_item_orientation(cell)
 		}
 
 
@@ -447,10 +448,15 @@ func build_map(data):
 			print("Missing tile:", tile_name)
 			continue
 
+		var rotation = 0
+
+		if tile.has("rotation"):
+			rotation = tile["rotation"]
 
 		grid_map.set_cell_item(
 			cell,
-			tile_id
+			tile_id,
+			rotation
 		)
 
 
